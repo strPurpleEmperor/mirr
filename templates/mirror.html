@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>设置</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
             background-color:#faebd7;
@@ -25,10 +26,22 @@
 
     {% if result_filename %}
     <h2>处理后的结果:</h2>
-    <img src="{{ url_for('generated_file', filename=result_filename) }}?{{ random }}" alt="Processed Image">
+    <img id="result_img" src="{{ url_for('generated_file', filename=result_filename) }}?{{ random }}" alt="Processed Image">
     {% endif %}
 
     <br>
     <a href="/upload">重新选择图像</a>
+    <button id="download_btn">下载图片</button>
+    <script>
+        const result_img = document.getElementById('result_img')
+        const download_btn = document.getElementById('download_btn')
+        download_btn.addEventListener('click', function () {
+            if (!result_img.src) return
+            const a = document.createElement('a')
+            a.href = result_img.src
+            a.download = result_img.src
+            a.click()
+        })
+    </script>
 </body>
 </html>
