@@ -1,7 +1,7 @@
 import os
 from flask import Flask, render_template, request, send_from_directory
 from datetime import datetime
-from mirror import mirror_flip_image, mirror_flip_gif
+from mirror import mirror_flip_image, mirror_flip_gif, create_windmill_gif
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads'
@@ -33,15 +33,16 @@ def mirror():
     filename = request.form['filename']
     l2r = request.form.get('l2r') == 'l2r'
     vertical = request.form.get('vertical') == 'true'  # 获取 vertical 参数
+    windmill = request.form.get('windmill') == 'true'  # 获取 大风车 参数
     input_filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-
     if not os.path.exists('output'):
         os.mkdir('output')
 
     output_filename = f'flipped_{"l2r" if l2r else "r2l"}_{"vertical" if vertical else "horizontal"}_{filename}'
     output_filepath = os.path.join('output', output_filename)
-
-    if filename.endswith('.jpg') or filename.endswith('.png'):
+    if windmill:
+      create_windmill_gif(input_filepath, output_filepath)
+    elif filename.endswith('.jpg') or filename.endswith('.png'):
         mirror_flip_image(input_filepath, output_filepath, l2r, vertical)
     elif filename.endswith('.gif'):
         mirror_flip_gif(input_filepath, output_filepath, l2r, vertical)
