@@ -5,11 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="de02946d-1a7f-4a4a-b7bb-94f636e9f44a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mirror.py" beforeDir="false" afterPath="$PROJECT_DIR$/mirror.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/mirror.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/mirror.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/upload_failed.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/upload_failed.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,7 +53,7 @@
       <workItem from="1727339346369" duration="2630000" />
       <workItem from="1728899377994" duration="2519000" />
       <workItem from="1728906939436" duration="49000" />
-      <workItem from="1728907066233" duration="1123000" />
+      <workItem from="1728907066233" duration="3856000" />
     </task>
     <servers />
   </component>
