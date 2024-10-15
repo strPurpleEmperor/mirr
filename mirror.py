@@ -61,14 +61,14 @@ output_jpg_path = 'output.jpg'
 # mirror_flip_gif(input_gif_path, output_gif_path, l2r=False, vertical=True)
 # mirror_flip_image(input_jpg_path, output_jpg_path, l2r=True, vertical=False)
 
-def create_windmill_frame(blade_image, size, angle, offset=0):
+def create_windmill_frame(blade_image, size, angle, enlarge=False):
     """
     offset: 控制图片向中心聚拢的距离，值越大，图片越靠近中心
     size: 最终图像的背景大小（正方形）
     blade_image: 原始传入的图片，保持宽高比不变
     """
     # 创建一个统一的背景，不再是透明
-    background = Image.new("RGBA", (size, size), (255, 255, 255, 0))  # 背景为白色
+    background = Image.new("RGBA", (size, size), (0, 0, 0, 1))  # 背景为白色
     center = (size // 2, size // 2)
 
     # 根据原始图片的宽高比调整大小，保持宽高比不变
@@ -84,8 +84,13 @@ def create_windmill_frame(blade_image, size, angle, offset=0):
         # 如果图片高大于宽，根据高度缩放
         new_height = max_height
         new_width = int(max_height * aspect_ratio)
-
-    resized_blade = blade_image.resize((new_width, new_height), Image.LANCZOS)
+ # 如果需要放大，将尺寸放大1.1倍
+    re_new_width = new_width
+    re_new_height = new_height
+    if enlarge:
+        re_new_width = int(new_width * 1.1)
+        re_new_height = int(new_height * 1.1)
+    resized_blade = blade_image.resize((re_new_width, re_new_height), Image.LANCZOS)
 
     # 计算四个图片的粘贴位置，并分别以0, 90, 180, 270度旋转
     blades = [
@@ -94,21 +99,25 @@ def create_windmill_frame(blade_image, size, angle, offset=0):
         resized_blade.rotate(-180, expand=True),  # 180度旋转
         resized_blade.rotate(-270, expand=True)  # 270度旋转
     ]
-
+    offset = re_new_width - new_width
+    offset_h = re_new_height - new_height
+    offset2 = int(offset / 2)
+    offset2_h = int(offset_h / 2)
     # 向中心偏移 offset 值，offset 为0时图片应放在四个角
     if blade_image.width > blade_image.height:
         positions = [
-            (0, 0 + new_width - new_height),  # 左上
-            (size - new_width, 0),  # 右上
+            (0 - offset, 0 + new_width - new_height - offset_h),  # 左上
+            (size - new_width, 0 - offset),  # 右上
             (size - new_width, size - new_width),  # 右下
-            (0 + new_width - new_height, size - new_width)  # 左下
+            (0 - offset_h + new_width - new_height, size - new_width)  # 左下
         ]
     else:
+        print(offset)
         positions = [
-            (0 - new_width + new_height, 0),  # 左上
-            (size - new_height, 0 - new_width + new_height),  # 右上
-            (size - new_height, size - new_height),  # 右下
-            (0, size - new_height)  # 左下
+            (0 - new_width + new_height - offset, 0 - offset_h),  # 左上 --
+            (size - new_height, 0 - new_width + new_height - offset),  # 右上+-
+            (size - new_height, size - new_height),  # 右下++
+            (0 - offset_h, size - new_height)  # 左下-+
         ]
     # 将四张图片粘贴到对应的位置
     for blade, pos in zip(blades, positions):
@@ -127,7 +136,9 @@ def create_windmill_gif(input_path, output_path, size=450, frames=25, duration=6
 
         for i in range(frames):
             angle = i * angle_step
-            frame = create_windmill_frame(blade_img, size, angle)
+            # 如果当前帧的角度不是90度的倍数，放大图片
+            enlarge = (i * angle_step) % 90 != 0
+            frame = create_windmill_frame(blade_img, size, angle, enlarge)
             gif_frames.append(frame)
 
         # 将所有帧转换为 P模式并设置透明度
