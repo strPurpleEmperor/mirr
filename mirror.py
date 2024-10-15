@@ -68,7 +68,7 @@ def create_windmill_frame(blade_image, size, angle, offset=0):
     blade_image: 原始传入的图片，保持宽高比不变
     """
     # 创建一个统一的背景，不再是透明
-    background = Image.new("RGB", (size, size), (0, 0, 0, 0))  # 背景为白色
+    background = Image.new("RGBA", (size, size), (255, 255, 255, 0))  # 背景为白色
     center = (size // 2, size // 2)
 
     # 根据原始图片的宽高比调整大小，保持宽高比不变
@@ -118,7 +118,7 @@ def create_windmill_frame(blade_image, size, angle, offset=0):
     rotated_background = background.rotate(angle, resample=Image.BICUBIC)
     return rotated_background
 
-def create_windmill_gif(input_path, output_path, size=450, frames=25, duration=120, clockwise=False):
+def create_windmill_gif(input_path, output_path, size=450, frames=25, duration=60, clockwise=False):
     with Image.open(input_path) as blade_img:
         blade_img = blade_img.convert("RGBA")  # 确保图片有透明度
         gif_frames = []
@@ -140,7 +140,7 @@ def create_windmill_gif(input_path, output_path, size=450, frames=25, duration=1
             append_images=gif_frames[1:],
             loop=0,
             duration=duration,  # 每帧持续时间
-            transparency=1,
+            transparency=None,
             disposal=2,
             format="GIF"  # 确保以GIF格式保存
         )
