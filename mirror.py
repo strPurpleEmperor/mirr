@@ -87,9 +87,10 @@ def create_windmill_frame(blade_image, size, angle, enlarge=False):
  # 如果需要放大，将尺寸放大1.1倍
     re_new_width = new_width
     re_new_height = new_height
+    scale = 1.2
     if enlarge:
-        re_new_width = int(new_width * 1.1)
-        re_new_height = int(new_height * 1.1)
+        re_new_width = int(new_width * scale)
+        re_new_height = int(new_height * scale)
     resized_blade = blade_image.resize((re_new_width, re_new_height), Image.LANCZOS)
 
     # 计算四个图片的粘贴位置，并分别以0, 90, 180, 270度旋转
@@ -112,7 +113,6 @@ def create_windmill_frame(blade_image, size, angle, enlarge=False):
             (0 - offset_h + new_width - new_height, size - new_width)  # 左下
         ]
     else:
-        print(offset)
         positions = [
             (0 - new_width + new_height - offset, 0 - offset_h),  # 左上 --
             (size - new_height, 0 - new_width + new_height - offset),  # 右上+-
