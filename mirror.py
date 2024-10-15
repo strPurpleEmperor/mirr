@@ -90,9 +90,9 @@ def create_windmill_frame(blade_image, size, angle, offset=0):
     # 计算四个图片的粘贴位置，并分别以0, 90, 180, 270度旋转
     blades = [
         resized_blade,  # 0度旋转
-        resized_blade.rotate(90, expand=True),  # 90度旋转
-        resized_blade.rotate(180, expand=True),  # 180度旋转
-        resized_blade.rotate(270, expand=True)  # 270度旋转
+        resized_blade.rotate(-90, expand=True),  # 90度旋转
+        resized_blade.rotate(-180, expand=True),  # 180度旋转
+        resized_blade.rotate(-270, expand=True)  # 270度旋转
     ]
 
     # 向中心偏移 offset 值，offset 为0时图片应放在四个角
@@ -118,7 +118,7 @@ def create_windmill_frame(blade_image, size, angle, offset=0):
     rotated_background = background.rotate(angle, resample=Image.BICUBIC)
     return rotated_background
 
-def create_windmill_gif(input_path, output_path, size=450, frames=15, duration=100, clockwise=False):
+def create_windmill_gif(input_path, output_path, size=450, frames=25, duration=120, clockwise=False):
     with Image.open(input_path) as blade_img:
         blade_img = blade_img.convert("RGBA")  # 确保图片有透明度
         gif_frames = []
@@ -140,7 +140,7 @@ def create_windmill_gif(input_path, output_path, size=450, frames=15, duration=1
             append_images=gif_frames[1:],
             loop=0,
             duration=duration,  # 每帧持续时间
-            transparency=0,
+            transparency=1,
             disposal=2,
             format="GIF"  # 确保以GIF格式保存
         )
